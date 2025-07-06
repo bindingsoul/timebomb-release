@@ -28,6 +28,14 @@ Timebomb attaches a **self-destruction timer** to any file/folder via right-clic
 Once the timer expires, the file is deleted *automatically* — no need for manual cleanup.
 
 ---
+### How Timebomb Stacks Up
+| Feature              | Self-Destruct | autoExpire | Hazel | Timebomb |
+|----------------------|:-------------:|:----------:|:-----:|:--------:|
+| Right-click install  | ✅            | ❌         | ❌    | ✅       |
+| Free/Open-source     | ✅            | ❌         | ❌    | ✅       |
+| Time-based delete    | ✅            | ✅         | ✅    | ✅       |
+| GUI setup            | CLI/tagging   | GUI        | GUI + rules | Quick Actions |
+
 
 ## 📁 What's Included
 
