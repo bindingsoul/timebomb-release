@@ -1,4 +1,3 @@
-```markdown
 # 🧨 Timebomb — Auto-Delete Files After Set Duration (macOS)
 
 **Timebomb** lets you right-click any file or folder on macOS and schedule it for automatic deletion in:
@@ -186,4 +185,3 @@ MIT © 2025 — Do what you want, but give credit. And don’t sue.
 ## 👨‍💻 Author
 
 Built with chai, code, and chaos by [@bindingsoul](https://github.com/bindingsoul)
-```
