@@ -7,7 +7,7 @@
 - 7 days
 - 1 month
 - 6 months
-- 1 year
+- 1 year.
 
 No more clutter from temporary files! 🧹
 
