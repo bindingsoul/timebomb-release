@@ -47,7 +47,7 @@ timebomb/
 │   ├── dlt-6-mnth.workflow
 │   ├── dlt-1-year.workflow
 │   └── Timebomb-Delete-in-5-Minutes.workflow
-├── cleaner.sh           # Script that deletes expired files
+├── cleaner-epoch.sh     # Script that deletes expired files
 ├── timebomb.sh          # One-click installer
 ├── README.md            # You're reading this
 └── LICENSE              # MIT License
@@ -95,7 +95,7 @@ Expired files will be removed the next time you run the cleaner.
 ### Manual:
 
 ```bash
-bash ~/.timebomb/cleaner.sh
+bash ~/.timebomb/cleaner-epoch.sh
 ```
 
 ### Optional Automation:
@@ -129,7 +129,7 @@ done
 
 ---
 
-### 🧹 Cleaner Script (`cleaner.sh`)
+### 🧹 Cleaner Script (`cleaner-epoch.sh')
 
 This reads the tracker and deletes expired files:
 
@@ -176,7 +176,7 @@ brew install jq
 
 ## 🛣️ Roadmap
 
-- [ ] Launch Agent to auto-run `cleaner.sh`
+- [ ] Launch Agent to auto-run `cleaner-epoch.sh`
 - [ ] Menu bar mini-app for timebomb control
 - [ ] Drag & drop GUI for custom duration
 - [ ] Usage stats: how many files deleted, space saved

@@ -16,13 +16,13 @@ cp -R "$WORKFLOW_DIR"/*.workflow "$SERVICE_DIR/"
 
 echo "✅ Quick Actions copied to: $SERVICE_DIR"
 
-# === Step 2: Setup cleaner.sh ===
+# === Step 2: Setup cleaner-epoch.sh ===
 echo "🧹 Setting up cleaner script..."
 mkdir -p "$INSTALL_DIR"
-cp cleaner.sh "$INSTALL_DIR/"
-chmod +x "$INSTALL_DIR/cleaner.sh"
+cp cleaner-epoch.sh "$INSTALL_DIR/"
+chmod +x "$INSTALL_DIR/cleaner-epoch.sh"
 
-echo "✅ Cleaner script installed to: $INSTALL_DIR/cleaner.sh"
+echo "✅ Cleaner script installed to: $INSTALL_DIR/cleaner-epoch.sh"
 
 # === Step 3: Check for 'jq' dependency ===
 if ! command -v jq &> /dev/null; then
@@ -42,7 +42,7 @@ echo "   • Delete in 1 Month"
 echo "   ...and more!"
 echo ""
 echo "🧽 To clean expired files manually, run:"
-echo "   $INSTALL_DIR/cleaner.sh"
+echo "   $INSTALL_DIR/cleaner-epoch.sh"
 echo ""
 echo "🕘 You can also automate it with a launch agent (optional)."
 echo "⚠️  Restart Finder if Quick Actions don’t show immediately."
