@@ -6,7 +6,7 @@
 - 7 days
 - 1 month
 - 6 months
-- 1 year.
+- 1 year
 
 No more clutter from temporary files! 🧹
 
@@ -27,7 +27,9 @@ Timebomb attaches a **self-destruction timer** to any file/folder via right-clic
 Once the timer expires, the file is deleted *automatically* — no need for manual cleanup.
 
 ---
-### How Timebomb Stacks Up
+
+### 🔍 How Timebomb Stacks Up
+
 | Feature              | Self-Destruct | autoExpire | Hazel | Timebomb |
 |----------------------|:-------------:|:----------:|:-----:|:--------:|
 | Right-click install  | ✅            | ❌         | ❌    | ✅       |
@@ -35,22 +37,23 @@ Once the timer expires, the file is deleted *automatically* — no need for manu
 | Time-based delete    | ✅            | ✅         | ✅    | ✅       |
 | GUI setup            | CLI/tagging   | GUI        | GUI + rules | Quick Actions |
 
+---
 
 ## 📁 What's Included
 
 ```
-timebomb/
-├── workflows/           # Automator workflows (right-click delete options)
+timebomb-release/
+├── workflows/                 # Automator workflows (right-click delete options)
 │   ├── dlt-1-day.workflow
 │   ├── dlt-7-day.workflow
 │   ├── dlt-1-mnth.workflow
 │   ├── dlt-6-mnth.workflow
 │   ├── dlt-1-year.workflow
 │   └── Timebomb-Delete-in-5-Minutes.workflow
-├── cleaner-epoch.sh     # Script that deletes expired files
-├── timebomb.sh          # One-click installer
-├── README.md            # You're reading this
-└── LICENSE              # MIT License
+├── cleaner-epoch.sh                 # Script that deletes expired files
+├── install-timebomb.sh       # One-click installer
+├── README.md                  # You're reading this
+└── LICENSE                    # MIT License
 ```
 
 ---
@@ -60,24 +63,29 @@ timebomb/
 ### 🧾 Step 1: Clone the Repo
 
 ```bash
-git clone https://github.com/your-username/timebomb.git
-cd timebomb
+git clone https://github.com/bindingsoul/timebomb-release.git
+cd timebomb-release
 ```
 
 ### 💣 Step 2: Run the Installer
 
 ```bash
-chmod +x timebomb.sh
-./timebomb.sh
+chmod +x install-timebomb.sh
+./install-timebomb.sh
 ```
+
+This will:
+- Copy all workflows to `~/Library/Services` (so they appear in Finder's right-click menu)
+- Create the `~/.timebomb` directory and add the tracking file
+- Ensure the cleaner script is set up
 
 ---
 
 ## 🧽 How to Use
 
-1. Right-click **any file or folder** in Finder  
+1. **Right-click any file or folder** in Finder  
 2. Hover over **Quick Actions**  
-3. Select a timebomb option:
+3. Select one of the options:
    - Delete in 5 Minutes
    - Delete in 1 Day
    - Delete in 7 Days
@@ -85,30 +93,29 @@ chmod +x timebomb.sh
    - Delete in 6 Months
    - Delete in 1 Year
 
-Once selected, Timebomb schedules the file for auto-deletion.  
-Expired files will be removed the next time you run the cleaner.
+⏳ Timebomb will now schedule the file/folder for automatic deletion.
 
 ---
 
-## 🔁 How to Delete Expired Files
+## 🧹 How to Clean Expired Files
 
-### Manual:
+### Manual method
+
+Just run the cleaner script:
 
 ```bash
 bash ~/.timebomb/cleaner-epoch.sh
 ```
 
-### Optional Automation:
-
-Coming soon — launch agent setup to automatically clean every 10 minutes.
+This will remove all files whose deletion time has passed.
 
 ---
 
 ## 🧠 Code Explained
 
-### 🧨 Workflow Scripts (`.workflow`)
+### 🧨 Workflow Scripts (`*.workflow`)
 
-Each Automator Quick Action runs a `zsh` script:
+Each Automator Quick Action wraps a `zsh` script like this:
 
 ```zsh
 DELETE_EPOCH=$(date -v+7d +%s)
@@ -122,16 +129,16 @@ for f in "$@"; do
 done
 ```
 
-✅ What it does:
-- Gets the future deletion time
-- Appends the file path + deletion time to a tracker JSON file at `~/.timebomb/tracker.json`
-- Works even if multiple files are selected
+✅ This:
+- Converts chosen time to epoch format
+- Records file paths with deletion time in `tracker.json`
+- Allows multiple file selection at once
 
 ---
 
-### 🧹 Cleaner Script (`cleaner-epoch.sh')
+### 🧼 cleaner-epoch.sh
 
-This reads the tracker and deletes expired files:
+This is the engine that runs cleanup:
 
 ```zsh
 #!/bin/zsh
@@ -152,21 +159,22 @@ jq -c '.[]' "$JSON_FILE" | while read -r entry; do
   fi
 done
 
-# Clean up tracker file to keep only non-expired items
+# Keep only non-expired entries
 jq --argjson now "$NOW" '[.[] | select(.delete_epoch > $now)]' "$JSON_FILE" > "$JSON_FILE.tmp" && mv "$JSON_FILE.tmp" "$JSON_FILE"
 ```
 
-✅ What it does:
-- Deletes files whose time has expired
-- Cleans up the tracker
-- Keeps everything modular and fast
+✅ It:
+- Reads all scheduled paths
+- Checks whether each has expired
+- Deletes expired ones and updates `tracker.json`
 
 ---
 
 ## 📦 Requirements
 
 - macOS (tested on macOS Sonoma)
-- `jq` installed → install with:
+- [`jq`](https://stedolan.github.io/jq/) — lightweight JSON processor  
+Install it using:
 
 ```bash
 brew install jq
@@ -176,20 +184,20 @@ brew install jq
 
 ## 🛣️ Roadmap
 
-- [ ] Launch Agent to auto-run `cleaner-epoch.sh`
-- [ ] Menu bar mini-app for timebomb control
-- [ ] Drag & drop GUI for custom duration
-- [ ] Usage stats: how many files deleted, space saved
-- [ ] Easy uninstall script
+- [ ] Add LaunchAgent to run `cleaner-epoch.sh` automatically every few minutes
+- [ ] Create menu bar app for GUI control
+- [ ] Add support for custom time durations
+- [ ] Track total number of deletions and space saved
+- [ ] Add uninstall script
 
 ---
 
 ## 🪪 License
 
-MIT © 2025 — Do what you want, but give credit. And don’t sue.
+MIT © 2025 — Free to use, modify, distribute. Give credit where due.
 
 ---
 
 ## 👨‍💻 Author
 
-Built with chai, code, and chaos by [@bindingsoul](https://github.com/bindingsoul)
+Crafted with ☕️, 🧠, and 💣 by [@bindingsoul](https://github.com/bindingsoul)
