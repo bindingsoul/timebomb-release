@@ -71,10 +71,12 @@ chmod +x timebomb.sh
 1. Right-click **any file or folder** in Finder  
 2. Hover over **Quick Actions**  
 3. Select a timebomb option:
+   - Delete in 5 Minutes
    - Delete in 1 Day
    - Delete in 7 Days
    - Delete in 1 Month
-   - etc.
+   - Delete in 6 Months
+   - Delete in 1 Year
 
 Once selected, Timebomb schedules the file for auto-deletion.  
 Expired files will be removed the next time you run the cleaner.
@@ -86,7 +88,7 @@ Expired files will be removed the next time you run the cleaner.
 ### Manual:
 
 ```bash
-~/.timebomb/cleaner.sh
+bash ~/.timebomb/cleaner.sh
 ```
 
 ### Optional Automation:
@@ -95,11 +97,11 @@ Coming soon — launch agent setup to automatically clean every 10 minutes.
 
 ---
 
-## 🔍 How It Works
+## 🧠 Code Explained
 
-### Step 1: Timebomb Workflow Scripts
+### 🧨 Workflow Scripts (`.workflow`)
 
-Each `.workflow` file runs a `zsh` script like:
+Each Automator Quick Action runs a `zsh` script:
 
 ```zsh
 DELETE_EPOCH=$(date -v+7d +%s)
@@ -113,46 +115,75 @@ for f in "$@"; do
 done
 ```
 
-This stores file paths and their future deletion timestamps in `tracker.json`.
+✅ What it does:
+- Gets the future deletion time
+- Appends the file path + deletion time to a tracker JSON file at `~/.timebomb/tracker.json`
+- Works even if multiple files are selected
 
 ---
 
-### Step 2: cleaner.sh
+### 🧹 Cleaner Script (`cleaner.sh`)
 
-Periodically reads `tracker.json`, and deletes expired files:
+This reads the tracker and deletes expired files:
 
 ```zsh
-now=$(date +%s)
+#!/bin/zsh
+
+JSON_FILE="$HOME/.timebomb/tracker.json"
+NOW=$(date +%s)
+
+mkdir -p "$HOME/.timebomb"
+[ ! -f "$JSON_FILE" ] && echo "[]" > "$JSON_FILE"
+
 jq -c '.[]' "$JSON_FILE" | while read -r entry; do
   path=$(echo "$entry" | jq -r '.path')
-  expire=$(echo "$entry" | jq -r '.delete_epoch')
-  if [[ $expire -le $now ]]; then
-    rm -rf "$path" && echo "🗑 Deleted: $path"
+  expiry=$(echo "$entry" | jq -r '.delete_epoch')
+
+  if [[ "$NOW" -ge "$expiry" ]]; then
+    echo "🧹 Deleting expired: $path"
+    rm -rf "$path"
   fi
 done
+
+# Clean up tracker file to keep only non-expired items
+jq --argjson now "$NOW" '[.[] | select(.delete_epoch > $now)]' "$JSON_FILE" > "$JSON_FILE.tmp" && mv "$JSON_FILE.tmp" "$JSON_FILE"
 ```
+
+✅ What it does:
+- Deletes files whose time has expired
+- Cleans up the tracker
+- Keeps everything modular and fast
 
 ---
 
 ## 📦 Requirements
 
-- macOS (tested on latest Sonoma)
-- `jq` installed (`brew install jq`)
+- macOS (tested on macOS Sonoma)
+- `jq` installed → install with:
+
+```bash
+brew install jq
+```
 
 ---
 
 ## 🛣️ Roadmap
 
-- [ ] One-click Launch Agent installer to auto-run cleaner
-- [ ] GUI front-end (menu bar app)
-- [ ] Custom time duration input
-- [ ] Stats: how many files deleted, when, space saved
-- [ ] Uninstall script
+- [ ] Launch Agent to auto-run `cleaner.sh`
+- [ ] Menu bar mini-app for timebomb control
+- [ ] Drag & drop GUI for custom duration
+- [ ] Usage stats: how many files deleted, space saved
+- [ ] Easy uninstall script
 
 ---
 
 ## 🪪 License
 
-MIT © 2025
-```
+MIT © 2025 — Do what you want, but give credit. And don’t sue.
 
+---
+
+## 👨‍💻 Author
+
+Built with chai, code, and chaos by [@bindingsoul](https://github.com/bindingsoul)
+```
