@@ -118,6 +118,18 @@ This will remove all files whose deletion time has passed.
 
 ---
 
+## 🧹 Extra Cleanup: Remove Orphaned Tracker Entries
+
+If you delete files or folders outside of Timebomb (e.g., manually in Finder), you can clean up your tracker.json with:
+
+```bash
+./clean-timebomb-tracker.sh
+```
+
+This script removes any entries from `~/.timebomb/tracker.json` that point to files or folders that no longer exist, keeping your tracking file tidy and accurate. It is safe to run at any time.
+
+---
+
 ## 🧠 Code Explained
 
 ### 🧨 Workflow Scripts (`*.workflow`)

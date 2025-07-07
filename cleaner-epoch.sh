@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Run extra cleanup to remove orphaned tracker entries before deleting expired files
+CLEAN_TRACKER_SCRIPT="$HOME/timebomb-release/clean-timebomb-tracker.sh"
+if [ -x "$CLEAN_TRACKER_SCRIPT" ]; then
+  "$CLEAN_TRACKER_SCRIPT"
+fi
+
 JSON_FILE="$HOME/.timebomb/tracker.json"
 NOW=$(date +%s)
 

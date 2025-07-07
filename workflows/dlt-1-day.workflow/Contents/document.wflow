@@ -92,19 +92,21 @@ fi
 
 # Process each selected file/folder
 for f in "$@"; do
-  echo "⏳ Scheduling: $f"
-                                
-  "$JQ_PATH" --arg f "$f" --argjson e "$DELETE_EPOCH" \
-    'if . == [] then [{"path": $f, "delete_epoch": $e}] else . + [{"path": $f, "delete_epoch": $e}] end' \
-    "$JSON_FILE" 2&gt;/dev/null &gt; "$TMP_FILE"
-
-  # Validate tmp file, move only if not empty
-  if [ -s "$TMP_FILE" ]; then           
-    mv "$TMP_FILE" "$JSON_FILE"
-    echo "✅ Scheduled for deletion: $f (in 1 day)"
-  else  
-    echo "⚠️ Failed to update tracker for: $f"
-    rm -f "$TMP_FILE"
+  if [ -e "$f" ]; then
+    echo "⏳ Scheduling: $f"
+    "$JQ_PATH" --arg f "$f" --argjson e "$DELETE_EPOCH" \
+      'if . == [] then [{"path": $f, "delete_epoch": $e}] else . + [{"path": $f, "delete_epoch": $e}] end' \
+      "$JSON_FILE" 2>/dev/null > "$TMP_FILE"
+    # Validate tmp file, move only if not empty
+    if [ -s "$TMP_FILE" ]; then
+      mv "$TMP_FILE" "$JSON_FILE"
+      echo "✅ Scheduled for deletion: $f (in 1 day)"
+    else
+      echo "⚠️ Failed to update tracker for: $f"
+      rm -f "$TMP_FILE"
+    fi
+  else
+    echo "❌ File/Folder does not exist: $f"
   fi
 done
 </string>
