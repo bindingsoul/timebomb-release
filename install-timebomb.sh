@@ -36,6 +36,7 @@ fi
 echo ""
 echo "🎉 Timebomb setup complete!"
 echo "📂 Right-click any file or folder in Finder and choose:"
+echo "   • Delete in 3 min"
 echo "   • Delete in 1 Day"
 echo "   • Delete in 7 Days"
 echo "   • Delete in 1 Month"

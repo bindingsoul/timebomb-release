@@ -62,8 +62,8 @@
 					<string>#!/bin/zsh
 
 
-# Set deletion time (6 month from now)
-DELETE_EPOCH=$(date -v+6m +%s)
+# Set deletion time (3 minute from now)
+DELETE_EPOCH=$(date -v+3M +%s)
 
 # Define paths
 TRACKER_DIR="$HOME/.timebomb"
@@ -76,7 +76,7 @@ mkdir -p "$TRACKER_DIR"
 
 # Start logging (optional but helpful)
 exec >> "$LOG_FILE" 2>&1
-echo "[$(date)] ⏱ Timebomb triggered for6 monthy delete"
+echo "[$(date)] ⏱ Timebomb triggered for3-miny delete"
 
 # Resolve jq path
 JQ_PATH="$(which jq)"
@@ -96,7 +96,7 @@ for f in "$@"; do
   # Validate tmp file, move only if not empty
   if [ -s "$TMP_FILE" ]; then
     mv "$TMP_FILE" "$JSON_FILE"
-    echo "✅ Scheduled for deletion: $f (in 6 month)"
+    echo "✅ Scheduled for deletion: $f (in 3-min)"
   else
     echo "⚠️ Failed to update tracker for: $f"
     rm -f "$TMP_FILE"
@@ -127,7 +127,7 @@ done
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>C54915E6-D265-4BDD-9D02-B4F8E465DD81</string>
+				<string>EBA7FA99-7FB4-4F48-B0D2-C65233571C27</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -137,9 +137,9 @@ done
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>C13A25AD-A136-4835-B7A9-6C9F9EAC7AFE</string>
+				<string>541C9B2F-8D0F-45F4-8551-920AE4DB082A</string>
 				<key>UUID</key>
-				<string>831B94FD-C433-4337-AAE5-2127FF5CDACB</string>
+				<string>E6D724C8-4347-4D6C-95A3-5F3B5BC1C9A8</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
