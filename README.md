@@ -49,9 +49,10 @@ timebomb-release/
 │   ├── dlt-1-mnth.workflow
 │   ├── dlt-6-mnth.workflow
 │   ├── dlt-1-year.workflow
-│   └── Timebomb-Delete-in-5-Minutes.workflow
+│   └── dlt-3-min.workflow
 ├── cleaner-epoch.sh                 # Script that deletes expired files
-├── install-timebomb.sh       # One-click installer
+├── install-timebomb.sh       # One-command installer
+├── uninstall-timebomb.sh       # One-command uninstaller
 ├── README.md                  # You're reading this
 └── LICENSE                    # MIT License
 ```
@@ -92,7 +93,7 @@ This will:
 1. **Right-click any file or folder** in Finder  
 2. Hover over **Quick Actions**  
 3. Select one of the options:
-   - Delete in 5 Minutes
+   - Delete in 3 Minutes
    - Delete in 1 Day
    - Delete in 7 Days
    - Delete in 1 Month
@@ -124,14 +125,47 @@ This will remove all files whose deletion time has passed.
 Each Automator Quick Action wraps a `zsh` script like this:
 
 ```zsh
-DELETE_EPOCH=$(date -v+7d +%s)
-JSON_FILE="$HOME/.timebomb/tracker.json"
-mkdir -p "$HOME/.timebomb"
+#!/bin/zsh
 
+# Set deletion time (1 day from now)
+DELETE_EPOCH=$(date -v+1d +%s)
+
+# Define paths
+TRACKER_DIR="$HOME/.timebomb"
+JSON_FILE="$TRACKER_DIR/tracker.json"
+TMP_FILE="$JSON_FILE.tmp"
+LOG_FILE="$TRACKER_DIR/log.txt"
+
+# Ensure directory exists
+mkdir -p "$TRACKER_DIR"
+
+# Start logging (optional but helpful)
+exec >> "$LOG_FILE" 2>&1
+echo "[$(date)] ⏱ Timebomb triggered for 1-day delete"
+
+# Resolve jq path
+JQ_PATH="$(which jq)"
+if [[ -z "$JQ_PATH" ]]; then
+  echo "❌ jq not found. Please install jq using brew: brew install jq"
+  exit 1
+fi
+
+# Process each selected file/folder
 for f in "$@"; do
-  jq --arg f "$f" --argjson e "$DELETE_EPOCH" \
+  echo "⏳ Scheduling: $f"
+
+  "$JQ_PATH" --arg f "$f" --argjson e "$DELETE_EPOCH" \
     'if . == [] then [{"path": $f, "delete_epoch": $e}] else . + [{"path": $f, "delete_epoch": $e}] end' \
-    "$JSON_FILE" 2>/dev/null > "$JSON_FILE.tmp" && mv "$JSON_FILE.tmp" "$JSON_FILE"
+    "$JSON_FILE" 2>/dev/null > "$TMP_FILE"
+
+  # Validate tmp file, move only if not empty
+  if [ -s "$TMP_FILE" ]; then
+    mv "$TMP_FILE" "$JSON_FILE"
+    echo "✅ Scheduled for deletion: $f (in 1 day)"
+  else
+    echo "⚠️ Failed to update tracker for: $f"
+    rm -f "$TMP_FILE"
+  fi
 done
 ```
 
