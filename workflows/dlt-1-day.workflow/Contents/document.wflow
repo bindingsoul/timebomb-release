@@ -75,7 +75,7 @@ LOG_FILE="$TRACKER_DIR/log.txt"
 mkdir -p "$TRACKER_DIR"
 
 # Start logging (optional but helpful)
-exec >> "$LOG_FILE" 2>&1
+exec &gt;&gt; "$LOG_FILE" 2&gt;&amp;1
 echo "[$(date)] ⏱ Timebomb triggered for 1-day delete"
 
 # Resolve jq path
@@ -91,7 +91,7 @@ for f in "$@"; do
 
   "$JQ_PATH" --arg f "$f" --argjson e "$DELETE_EPOCH" \
     'if . == [] then [{"path": $f, "delete_epoch": $e}] else . + [{"path": $f, "delete_epoch": $e}] end' \
-    "$JSON_FILE" 2>/dev/null > "$TMP_FILE"
+    "$JSON_FILE" 2&gt;/dev/null &gt; "$TMP_FILE"
 
   # Validate tmp file, move only if not empty
   if [ -s "$TMP_FILE" ]; then
@@ -101,8 +101,7 @@ for f in "$@"; do
     echo "⚠️ Failed to update tracker for: $f"
     rm -f "$TMP_FILE"
   fi
-done
-</string>
+done</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -127,7 +126,7 @@ done
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>EBA7FA99-7FB4-4F48-B0D2-C65233571C27</string>
+				<string>939C1563-8E4B-4B05-BE21-3FF7F3C5D702</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -137,9 +136,9 @@ done
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>541C9B2F-8D0F-45F4-8551-920AE4DB082A</string>
+				<string>4CD300CF-1475-49CE-BC70-CAEF4B2EB636</string>
 				<key>UUID</key>
-				<string>E6D724C8-4347-4D6C-95A3-5F3B5BC1C9A8</string>
+				<string>25BE9B40-1C2C-4BD1-8FC4-230E2E2FB164</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
@@ -212,6 +211,8 @@ done
 						<string>4</string>
 					</dict>
 				</dict>
+				<key>conversionLabel</key>
+				<integer>0</integer>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>

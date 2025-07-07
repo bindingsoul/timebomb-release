@@ -12,7 +12,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>dlt-1-day</string>
+				<string>dlt-3-min</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>runWorkflowAsService</string>

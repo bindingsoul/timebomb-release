@@ -62,7 +62,7 @@
 					<string>#!/bin/zsh
 
 
-# Set deletion time (1 day from now)
+# Set deletion time (1 mnth from now)
 DELETE_EPOCH=$(date -v+1m +%s)
 
 # Define paths
@@ -75,8 +75,8 @@ LOG_FILE="$TRACKER_DIR/log.txt"
 mkdir -p "$TRACKER_DIR"
 
 # Start logging (optional but helpful)
-exec >> "$LOG_FILE" 2>&1
-echo "[$(date)] ⏱ Timebomb triggered for 1-day delete"
+exec &gt;&gt; "$LOG_FILE" 2&gt;&amp;1
+echo "[$(date)] ⏱ Timebomb triggered for 1-mnth delete"
 
 # Resolve jq path
 JQ_PATH="$(which jq)"
@@ -91,24 +91,23 @@ for f in "$@"; do
 
   "$JQ_PATH" --arg f "$f" --argjson e "$DELETE_EPOCH" \
     'if . == [] then [{"path": $f, "delete_epoch": $e}] else . + [{"path": $f, "delete_epoch": $e}] end' \
-    "$JSON_FILE" 2>/dev/null > "$TMP_FILE"
+    "$JSON_FILE" 2&gt;/dev/null &gt; "$TMP_FILE"
 
   # Validate tmp file, move only if not empty
   if [ -s "$TMP_FILE" ]; then
     mv "$TMP_FILE" "$JSON_FILE"
-    echo "✅ Scheduled for deletion: $f (in 1 day)"
+    echo "✅ Scheduled for deletion: $f (in 1 mnth)"
   else
     echo "⚠️ Failed to update tracker for: $f"
     rm -f "$TMP_FILE"
   fi
-done
-</string>
+done</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
 					<integer>1</integer>
 					<key>shell</key>
-					<string>/bin/bash</string>
+					<string>/bin/zsh</string>
 					<key>source</key>
 					<string></string>
 				</dict>
@@ -127,7 +126,7 @@ done
 				<key>Class Name</key>
 				<string>RunShellScriptAction</string>
 				<key>InputUUID</key>
-				<string>C54915E6-D265-4BDD-9D02-B4F8E465DD81</string>
+				<string>939C1563-8E4B-4B05-BE21-3FF7F3C5D702</string>
 				<key>Keywords</key>
 				<array>
 					<string>Shell</string>
@@ -137,9 +136,9 @@ done
 					<string>Unix</string>
 				</array>
 				<key>OutputUUID</key>
-				<string>C13A25AD-A136-4835-B7A9-6C9F9EAC7AFE</string>
+				<string>4CD300CF-1475-49CE-BC70-CAEF4B2EB636</string>
 				<key>UUID</key>
-				<string>831B94FD-C433-4337-AAE5-2127FF5CDACB</string>
+				<string>25BE9B40-1C2C-4BD1-8FC4-230E2E2FB164</string>
 				<key>UnlocalizedApplications</key>
 				<array>
 					<string>Automator</string>
@@ -215,7 +214,7 @@ done
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>309.000000:305.000000</string>
+				<string>441.000000:542.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
