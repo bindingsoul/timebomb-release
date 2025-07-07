@@ -59,6 +59,12 @@ timebomb-release/
 ---
 
 ## ⚙️ Installation
+### Step 0: Create a snapshot
+for mac before executing any new scripts make it a habit to have a snapshot. 
+Note: Snapshot are auto deleted my macOS after 24 hours, to manage space. Thus if on your system this scripts clash with your other user built scripts, you could simply go back to the snapshot. Below command create a local snapshot on mac.
+```bash
+tmutil localsnapshot
+```
 
 ### 🧾 Step 1: Clone the Repo
 
