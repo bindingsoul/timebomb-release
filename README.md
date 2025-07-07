@@ -110,7 +110,7 @@ This will:
 Just run the cleaner script:
 
 ```bash
-bash ~/.timebomb/cleaner-epoch.sh
+~/.timebomb/cleaner-epoch.sh
 ```
 
 This will remove all files whose deletion time has passed.
