@@ -12,6 +12,9 @@ echo "-----------------------------"
 # === Step 1: Install Automator Workflows ===
 echo "📁 Installing Quick Actions to Finder..."
 mkdir -p "$SERVICE_DIR"
+# Remove old one if exists then move the folder
+rm -rf "$HOME/Library/Services/dlt-*.workflow"
+
 cp -R "$WORKFLOW_DIR"/*.workflow "$SERVICE_DIR/"
 
 echo "✅ Quick Actions copied to: $SERVICE_DIR"
