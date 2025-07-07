@@ -72,14 +72,19 @@ TMP_FILE="$JSON_FILE.tmp"
 LOG_FILE="$TRACKER_DIR/log.txt"
 
 # Ensure directory exists
-mkdir -p "$TRACKER_DIR"
+mkdir -p "$TRACKER_DIR"         
+
+# Ensure tracker.json exists and is valid
+if [ ! -s "$JSON_FILE" ]; then
+  echo '[]' &gt; "$JSON_FILE"
+fi
 
 # Start logging (optional but helpful)
 exec &gt;&gt; "$LOG_FILE" 2&gt;&amp;1
-echo "[$(date)] ⏱ Timebomb triggered for 1-mnth delete"
+echo "[$(date)] ⏱ Timebomb triggered for 1 mnth delete"
 
 # Resolve jq path
-JQ_PATH="$(which jq)"
+JQ_PATH="$(which jq)"                   
 if [[ -z "$JQ_PATH" ]]; then
   echo "❌ jq not found. Please install jq using brew: brew install jq"
   exit 1
@@ -88,20 +93,21 @@ fi
 # Process each selected file/folder
 for f in "$@"; do
   echo "⏳ Scheduling: $f"
-
+                                
   "$JQ_PATH" --arg f "$f" --argjson e "$DELETE_EPOCH" \
     'if . == [] then [{"path": $f, "delete_epoch": $e}] else . + [{"path": $f, "delete_epoch": $e}] end' \
     "$JSON_FILE" 2&gt;/dev/null &gt; "$TMP_FILE"
 
   # Validate tmp file, move only if not empty
-  if [ -s "$TMP_FILE" ]; then
+  if [ -s "$TMP_FILE" ]; then           
     mv "$TMP_FILE" "$JSON_FILE"
     echo "✅ Scheduled for deletion: $f (in 1 mnth)"
-  else
+  else  
     echo "⚠️ Failed to update tracker for: $f"
     rm -f "$TMP_FILE"
   fi
-done</string>
+done
+</string>
 					<key>CheckedForUserDefaultShell</key>
 					<true/>
 					<key>inputMethod</key>
@@ -214,7 +220,7 @@ done</string>
 				<key>isViewVisible</key>
 				<integer>1</integer>
 				<key>location</key>
-				<string>441.000000:542.000000</string>
+				<string>441.000000:569.000000</string>
 				<key>nibPath</key>
 				<string>/System/Library/Automator/Run Shell Script.action/Contents/Resources/Base.lproj/main.nib</string>
 			</dict>
